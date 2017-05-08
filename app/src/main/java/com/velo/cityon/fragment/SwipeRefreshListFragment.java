@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cityon.velo.com.cityon.fragment.swiperefreshlist;
+package com.velo.cityon.fragment;
 
 import android.content.Context;
 import android.os.Bundle;

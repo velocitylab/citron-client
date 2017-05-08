@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cityon.velo.com.cityon.fragment.swiperefreshlist;
+package com.velo.cityon.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,11 +23,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-import java.util.List;
+import com.velo.cityon.R;
+import com.velo.cityon.adapter.TestAdapter;
+import com.velo.cityon.dummydata.Cheeses;
 
-import cityon.velo.com.cityon.R;
-import cityon.velo.com.cityon.adapter.TestAdapter;
-import cityon.velo.com.cityon.dummydata.Cheeses;
+import java.util.List;
 
 
 /**
@@ -72,7 +72,7 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
         TestAdapter adapter = new TestAdapter(
                 getActivity(),
                 R.layout.list,
-                Cheeses.randomPersonList(10));
+                Cheeses.randomPersonList(1));
 
         // Set the adapter between the ListView and its backing data.
         setListAdapter(adapter);

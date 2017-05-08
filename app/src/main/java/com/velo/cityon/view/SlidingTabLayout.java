@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cityon.velo.com.cityon.view;
+package com.velo.cityon.view;
 
 import android.content.Context;
 import android.graphics.Typeface;

@@ -1,13 +1,13 @@
-package cityon.velo.com.cityon;
+package com.velo.cityon.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import cityon.velo.com.cityon.activity.MainActivity;
+import com.velo.cityon.R;
+
 
 public class LoadingActivity extends Activity {
 

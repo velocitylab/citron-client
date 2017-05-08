@@ -18,5 +18,7 @@
     <dimen name="logo_popup_text2_bottom_margin">100dp</dimen>
     <dimen name="logo_popup_text2_left_margin">107dp</dimen>
     <dimen name="logo_popup_text2_right_margin">107dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
 
 </resources>

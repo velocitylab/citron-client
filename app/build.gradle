@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "cityon.velo.com.cityon"
+        applicationId "com.velo.cityon"
         minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
@@ -19,11 +19,16 @@ android {
     }
 }
 
+
+
+
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:+'
-    compile 'com.android.support:support-v4:+'
-    compile 'com.android.support:design:+'
-    compile 'com.android.support.constraint:constraint-layout:+'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 }

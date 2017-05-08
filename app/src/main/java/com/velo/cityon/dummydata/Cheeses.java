@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package cityon.velo.com.cityon.dummydata;
+package com.velo.cityon.dummydata;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-import cityon.velo.com.cityon.adapter.TestAdapter;
+import com.velo.cityon.adapter.TestAdapter;
+import com.velo.cityon.utils.DateUtil;
 
 /**
  * Dummy data.
@@ -194,10 +195,10 @@ public class Cheeses {
         // Make sure that don't infinity loop
         count = Math.min(count, CHEESES.length);
 
+        String date = DateUtil.getDate();
+
         while (items.size() < count) {
-            items.add(
-                    new TestAdapter.Person(CHEESES[random.nextInt(CHEESES.length)],
-                            String.valueOf(count)));
+            items.add(new TestAdapter.Person(CHEESES[random.nextInt(CHEESES.length)], date));
         }
 
         return new ArrayList<TestAdapter.Person>(items);

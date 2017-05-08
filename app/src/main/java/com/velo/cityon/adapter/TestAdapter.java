@@ -1,4 +1,4 @@
-package cityon.velo.com.cityon.adapter;
+package com.velo.cityon.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,9 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.velo.cityon.R;
+
 import java.util.ArrayList;
 
-import cityon.velo.com.cityon.R;
 
 
 public class TestAdapter extends ArrayAdapter<TestAdapter.Person> {
