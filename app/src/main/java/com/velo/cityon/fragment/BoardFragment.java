@@ -7,12 +7,16 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.velo.cityon.R;
 import com.velo.cityon.adapter.TestAdapter;
@@ -36,9 +40,10 @@ public class BoardFragment extends Fragment{
     private FragmentManager fragmentManager;
 
     private ViewPager mViewPager;
-    private TabLayout tabLayout;
     private OnFragmentInteractionListener mListener;
 
+    private LinearLayout mTitleList;
+    private LinearLayout mTitleIndexer;
 
     // TODO: Rename and change types and number of parameters
     public static BoardFragment newInstance() {
@@ -54,28 +59,44 @@ public class BoardFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_board, container, false);
+        View view = inflater.inflate(R.layout.fragment_board, container, false);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        if(mViewPager == null){
-            Log.d(LOG_TAG, "mViewPager is null");
-        }else {
-            tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout.setupWithViewPager(mViewPager);
 
+        //--------------
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
+        mTitleList = (LinearLayout) view.findViewById(R.id.toolbar_title_layout);
+        mTitleIndexer = (LinearLayout) view.findViewById(R.id.toolbar_title_page_indexer);
+
+
+        if (mViewPager != null) {
+            for (int i = 0; i < mViewPager.getAdapter().getCount(); i++) {
+                StringBuilder title = new StringBuilder();
+                title.append(mViewPager.getAdapter().getPageTitle(i));
+
+                TextView text = new TextView(getContext());
+                text.setText(title);
+                text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                text.setTextSize(30);
+                text.setPadding(10, 0, 10, 0);
+                mTitleList.addView(text);
+
+                ImageView indexer = new ImageView(getContext());
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(5, 0, 5, 0);
+                indexer.setLayoutParams(lp);
+                indexer.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_toolbar_index_select_shape));
+                mTitleIndexer.addView(indexer);
+            }
+        }
         return view;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
