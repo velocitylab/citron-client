@@ -27,8 +27,8 @@
             android:layout_height="wrap_content"
             app:tabGravity="center"
             app:tabMode="scrollable" />
-
     </android.support.design.widget.AppBarLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

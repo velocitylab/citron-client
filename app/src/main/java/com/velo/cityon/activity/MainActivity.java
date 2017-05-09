@@ -10,75 +10,91 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.velo.cityon.fragment.AppbarFragment;
-import com.velo.cityon.fragment.BlankFragment;
+import com.velo.cityon.fragment.BoardFragment;
+import com.velo.cityon.fragment.BottomFragment;
+import com.velo.cityon.fragment.MessageFragment;
+import com.velo.cityon.fragment.ProfileFragment;
+import com.velo.cityon.fragment.SearchFragment;
 import com.velo.cityon.fragment.SwipeRefreshListFragmentFragment;
 
 import com.velo.cityon.R;
+import com.velo.cityon.fragment.WriteFragment;
 
-public class MainActivity extends AppCompatActivity implements BlankFragment.OnFragmentInteractionListener, AppbarFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements  BottomFragment.OnFragmentInteractionListener,
+                                                                    AppbarFragment.OnFragmentInteractionListener,
+                                                                    BoardFragment.OnFragmentInteractionListener,
+                                                                    SearchFragment.OnFragmentInteractionListener,
+                                                                    WriteFragment.OnFragmentInteractionListener,
+                                                                    MessageFragment.OnFragmentInteractionListener,
+                                                                    ProfileFragment.OnFragmentInteractionListener
+{
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private Button buttonBoard;
+    private Button buttonSearch;
+    private Button buttonWrite;
+    private Button buttonMessage;
+    private Button buttonProfile;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+
+    private BoardFragment boardFragment;
+    private SearchFragment searchFragment;
+    private WriteFragment writeFragment;
+    private MessageFragment messageFragment;
+    private ProfileFragment profileFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if (findViewById(R.id.fragment_container) != null) {
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+            // Create a new Fragment to be placed in the activity layout
+            boardFragment = BoardFragment.newInstance();
+            searchFragment = SearchFragment.newInstance();
+            writeFragment = WriteFragment.newInstance();
+            messageFragment = MessageFragment.newInstance();
+            profileFragment = ProfileFragment.newInstance();
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, boardFragment)
+                    .add(R.id.fragment_container, searchFragment)
+                    .add(R.id.fragment_container, writeFragment)
+                    .add(R.id.fragment_container, messageFragment)
+                    .add(R.id.fragment_container, profileFragment)
+                    .hide(searchFragment).hide(writeFragment).hide(messageFragment).hide(profileFragment)
+                    .commit();
         }
 
-        return super.onOptionsItemSelected(item);
+
+        buttonBoard = (Button) findViewById(R.id.buttonBoard);
+        buttonSearch = (Button) findViewById(R.id.buttonSearch);
+        buttonWrite = (Button) findViewById(R.id.buttonWrite);
+        buttonMessage = (Button) findViewById(R.id.buttonMessage);
+        buttonProfile = (Button) findViewById(R.id.buttonProfile);
+
+        buttonBoard.setOnClickListener(myCnClickListenr);
+        buttonSearch.setOnClickListener(myCnClickListenr);
+        buttonWrite.setOnClickListener(myCnClickListenr);
+        buttonMessage.setOnClickListener(myCnClickListenr);
+        buttonProfile.setOnClickListener(myCnClickListenr);
+
+
     }
 
     @Override
@@ -86,32 +102,46 @@ public class MainActivity extends AppCompatActivity implements BlankFragment.OnF
 
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
+    private View.OnClickListener myCnClickListenr = new View.OnClickListener() {
         @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return new SwipeRefreshListFragmentFragment();
-        }
+        public void onClick(View v) {
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 2;
-        }
+            switch(v.getId()) {
+                case R.id.buttonSearch:
+                    getSupportFragmentManager().beginTransaction()
+                            .show(searchFragment)
+                            .hide(boardFragment).hide(writeFragment).hide(messageFragment).hide(profileFragment)
+                            .commit();
+                    break;
+                case R.id.buttonWrite:
+                    getSupportFragmentManager().beginTransaction()
+                            .show(writeFragment)
+                            .hide(boardFragment).hide(searchFragment).hide(messageFragment).hide(profileFragment)
+                            .commit();
+                    break;
+                case R.id.buttonMessage:
+                    getSupportFragmentManager().beginTransaction()
+                            .show(messageFragment)
+                            .hide(boardFragment).hide(writeFragment).hide(searchFragment).hide(profileFragment)
+                            .commit();
+                    break;
+                case R.id.buttonProfile:
+                    getSupportFragmentManager().beginTransaction()
+                            .show(profileFragment)
+                            .hide(boardFragment).hide(writeFragment).hide(messageFragment).hide(searchFragment)
+                            .commit();
+                    break;
+                default:
+                    getSupportFragmentManager().beginTransaction()
+                            .show(boardFragment)
+                            .hide(searchFragment).hide(writeFragment).hide(messageFragment).hide(profileFragment)
+                            .commit();
+                    break;
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "SECTION" + position;
+            }
         }
-    }
+    };
+
+
+
 }
