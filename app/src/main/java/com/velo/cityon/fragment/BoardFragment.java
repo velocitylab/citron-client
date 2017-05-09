@@ -64,16 +64,15 @@ public class BoardFragment extends Fragment{
             tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         }
 
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        tabLayout.setupWithViewPager(mViewPager);
+
         return view;
     }
 
     @Override
     public void onResume() {
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout.setupWithViewPager(mViewPager);
-
         super.onResume();
     }
 
