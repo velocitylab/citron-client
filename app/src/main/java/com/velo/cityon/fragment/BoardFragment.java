@@ -157,7 +157,7 @@ public class BoardFragment extends Fragment{
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 10;
         }
 
         @Override
