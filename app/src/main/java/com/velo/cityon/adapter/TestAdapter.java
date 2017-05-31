@@ -9,18 +9,17 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.velo.cityon.R;
+import com.velo.cityon.model.Posting;
 
 import java.util.ArrayList;
 
-
-
-public class TestAdapter extends ArrayAdapter<TestAdapter.Person> {
+public class TestAdapter extends ArrayAdapter<Posting> {
 
     private static final String LOG_TAG = TestAdapter.class.getSimpleName();
 
-    private ArrayList<Person> items;
+    private ArrayList<Posting> items;
 
-    public TestAdapter(Context context, int textViewResourceId, ArrayList<Person> items) {
+    public TestAdapter(Context context, int textViewResourceId, ArrayList<Posting> items) {
         super(context, textViewResourceId, items);
         this.items = items;
     }
@@ -29,45 +28,26 @@ public class TestAdapter extends ArrayAdapter<TestAdapter.Person> {
         View v = convertView;
         if (v == null) {
            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-           v = vi.inflate(R.layout.list, null);
+           v = vi.inflate(R.layout.posting_list, null);
         }
 
         Log.d(LOG_TAG, "position : "+position);
-        Person p = items.get(position);
+        Posting p = items.get(position);
 
         if (p != null) {
-            TextView tt = (TextView) v.findViewById(R.id.toptext);
-            TextView mt = (TextView) v.findViewById(R.id.middletext);
-            TextView bt = (TextView) v.findViewById(R.id.bottomtext);
-            if (tt != null){
-                tt.setText(p.getName());
-            }
-            if(mt != null){
-                mt.setText("number : "+ p.getNumber());
-            }
-            if(bt != null){
-                bt.setText("count : "+ position);
-            }
+            TextView pTitle      = (TextView) v.findViewById(R.id.posting_title);
+            TextView pWriter     = (TextView) v.findViewById(R.id.posting_writer);
+            TextView pHitCount   = (TextView) v.findViewById(R.id.posting_hit_count);
+            TextView pLikeCount  = (TextView) v.findViewById(R.id.posting_like_count);
+            TextView pReplyCount = (TextView) v.findViewById(R.id.posting_reply_count);
+
+            pTitle.setText(p.getTitle());
+            pWriter.setText(p.getWriter());
+            pHitCount.setText(String.valueOf(p.getHitCount()));
+            pLikeCount.setText(String.valueOf(p.getLikeCount()));
+            pReplyCount.setText(String.valueOf(p.getReplyCount()));
         }
         return v;
-    }
-
-    public static class Person{
-        private String Name;
-        private String Number;
-
-        public Person(String _Name, String _Number){
-            this.Name = _Name;
-            this.Number = _Number;
-        }
-
-        public String getName() {
-            return Name;
-        }
-
-        public String getNumber() {
-            return Number;
-        }
     }
 }
 

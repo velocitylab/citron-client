@@ -26,7 +26,9 @@ import android.widget.ArrayAdapter;
 import com.velo.cityon.R;
 import com.velo.cityon.adapter.TestAdapter;
 import com.velo.cityon.dummydata.Cheeses;
+import com.velo.cityon.model.Posting;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,97 +56,56 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Notify the system to allow an options menu for this fragment.
         setHasOptionsMenu(false);
     }
 
-    // BEGIN_INCLUDE (setup_views)
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /**
-         * Create an ArrayAdapter to contain the data for the ListView. Each item in the ListView
-         * uses the system-defined simple_list_item_1 layout that contains one TextView.
-         */
-
         TestAdapter adapter = new TestAdapter(
                 getActivity(),
-                R.layout.list,
+                R.layout.posting_list,
                 Cheeses.randomPersonList(1));
 
-        // Set the adapter between the ListView and its backing data.
         setListAdapter(adapter);
 
-        // BEGIN_INCLUDE (setup_refreshlistener)
-        /**
-         * Implement {@link SwipeRefreshLayout.OnRefreshListener}. When users do the "swipe to
-         * refresh" gesture, SwipeRefreshLayout invokes
-         * {@link SwipeRefreshLayout.OnRefreshListener#onRefresh onRefresh()}. In
-         * {@link SwipeRefreshLayout.OnRefreshListener#onRefresh onRefresh()}, call a method that
-         * refreshes the content. Call the same method in response to the Refresh action from the
-         * action bar.
-         */
         setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
-
                 initiateRefresh();
             }
         });
         // END_INCLUDE (setup_refreshlistener)
     }
-    // END_INCLUDE (setup_views)
 
-
-    // END_INCLUDE (setup_refresh_menu_listener)
-
-    // BEGIN_INCLUDE (initiate_refresh)
-    /**
-     * By abstracting the refresh process to a single method, the app allows both the
-     * SwipeGestureLayout onRefresh() method and the Refresh action item to refresh the content.
-     */
     private void initiateRefresh() {
         Log.i(LOG_TAG, "initiateRefresh");
-
-        /**
-         * Execute the background task, which uses {@link AsyncTask} to load the data.
-         */
         new DummyBackgroundTask().execute();
     }
-    // END_INCLUDE (initiate_refresh)
 
-    // BEGIN_INCLUDE (refresh_complete)
-    /**
-     * When the AsyncTask finishes, it calls onRefreshComplete(), which updates the data in the
-     * ListAdapter and turns off the progress bar.
-     */
-    private void onRefreshComplete(List<TestAdapter.Person> result) {
+
+    private void onRefreshComplete(List<Posting> result) {
         Log.i(LOG_TAG, "onRefreshComplete");
 
         // Remove all items from the ListAdapter, and then replace them with the new items
-        ArrayAdapter<TestAdapter.Person> adapter = (ArrayAdapter<TestAdapter.Person>) getListAdapter();
+        ArrayAdapter<Posting> adapter = (ArrayAdapter<Posting>) getListAdapter();
         //adapter.clear();
-        for (TestAdapter.Person p : result) {
+
+        for (Posting p : result) {
             adapter.add(p);
         }
 
-        // Stop the refreshing indicator
         setRefreshing(false);
     }
-    // END_INCLUDE (refresh_complete)
 
-    /**
-     * Dummy {@link AsyncTask} which simulates a long running task to fetch new cheeses.
-     */
-    private class DummyBackgroundTask extends AsyncTask<Void, Void, List<TestAdapter.Person>> {
+    private class DummyBackgroundTask extends AsyncTask<Void, Void, List<Posting>> {
 
         static final int TASK_DURATION = 1 * 1000; // 1 seconds
 
         @Override
-        protected List<TestAdapter.Person> doInBackground(Void... params) {
+        protected List<Posting> doInBackground(Void... params) {
             // Sleep for a small amount of time to simulate a background-task
             try {
                 Thread.sleep(TASK_DURATION);
@@ -152,12 +113,12 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
                 e.printStackTrace();
             }
 
-            // Return a new random list of cheeses
-            return Cheeses.randomPersonList(LIST_ITEM_COUNT);
+            // Return a new random posting_list of cheeses
+            return Cheeses.randomPersonList(3);
         }
 
         @Override
-        protected void onPostExecute(List<TestAdapter.Person> result) {
+        protected void onPostExecute(List<Posting> result) {
             super.onPostExecute(result);
 
             // Tell the Fragment that the refresh has completed

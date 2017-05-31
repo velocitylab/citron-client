@@ -17,10 +17,12 @@
 package com.velo.cityon.dummydata;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 
 import com.velo.cityon.adapter.TestAdapter;
+import com.velo.cityon.model.Posting;
 import com.velo.cityon.utils.DateUtil;
 
 /**
@@ -169,7 +171,7 @@ public class Cheeses {
     }
 
     /**
-     * Return a list of random cheeses.
+     * Return a posting_list of random cheeses.
      *
      * @param count the amount of cheeses to return.
      */
@@ -188,19 +190,25 @@ public class Cheeses {
     }
 
 
-    public static ArrayList<TestAdapter.Person> randomPersonList(int count) {
+    public static ArrayList<Posting> randomPersonList(int count) {
         Random random = new Random();
-        HashSet<TestAdapter.Person> items = new HashSet<TestAdapter.Person>();
+        HashSet<Posting> items = new HashSet<Posting>();
 
         // Make sure that don't infinity loop
         count = Math.min(count, CHEESES.length);
-
         String date = DateUtil.getDate();
 
         while (items.size() < count) {
-            items.add(new TestAdapter.Person(CHEESES[random.nextInt(CHEESES.length)], date));
+            Posting p = new Posting();
+            p.setDate(new Date());
+            p.setTitle((CHEESES[random.nextInt(CHEESES.length)]));
+            p.setWriter("writer"+count);
+            p.setHitCount(random.nextInt(1000)+1);
+            p.setLikeCount(random.nextInt(100)+1);
+            p.setReplyCount(random.nextInt(10)+1);
+            items.add(p);
         }
 
-        return new ArrayList<TestAdapter.Person>(items);
+        return new ArrayList<Posting>(items);
     }
 }
