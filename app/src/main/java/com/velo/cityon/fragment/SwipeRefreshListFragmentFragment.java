@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.velo.cityon.R;
+import com.velo.cityon.adapter.PostingAdapter;
 import com.velo.cityon.adapter.TestAdapter;
 import com.velo.cityon.dummydata.Cheeses;
 import com.velo.cityon.model.Posting;
@@ -66,7 +67,6 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
 
     private static final String LOG_TAG = SwipeRefreshListFragmentFragment.class.getSimpleName();
     private List<Posting> items = new LinkedList<Posting>();
-    private TestAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,12 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
         }else{
             items = new ArrayList<>();
         }
-        adapter = new TestAdapter(
+//        TestAdapter adapter = new TestAdapter(
+//                getActivity(),
+//                R.layout.posting_list,
+//                items);
+
+        PostingAdapter adapter = new PostingAdapter(
                 getActivity(),
                 R.layout.posting_list,
                 items);
