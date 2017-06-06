@@ -27,6 +27,8 @@ import com.velo.cityon.fragment.SwipeRefreshListFragmentFragment;
 import com.velo.cityon.R;
 import com.velo.cityon.fragment.WriteFragment;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements  BottomFragment.OnFragmentInteractionListener,
                                                                     AppbarFragment.OnFragmentInteractionListener,
                                                                     BoardFragment.OnFragmentInteractionListener,
@@ -48,6 +50,13 @@ public class MainActivity extends AppCompatActivity implements  BottomFragment.O
     private WriteFragment writeFragment;
     private MessageFragment messageFragment;
     private ProfileFragment profileFragment;
+
+    final private String FRAGMENT_TAG_BOARD = "board_fragment";
+    final private String FRAGMENT_TAG_SEARCH = "search_fragment";
+    final private String FRAGMENT_TAG_WRITE = "write_fragment";
+    final private String FRAGMENT_TAG_MESSAGE = "message_fragment";
+    final private String FRAGMENT_TAG_PROFILE = "profile_fragment";
+
 
 
     @Override
@@ -72,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements  BottomFragment.O
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, boardFragment)
-                    .add(R.id.fragment_container, searchFragment)
-                    .add(R.id.fragment_container, writeFragment)
-                    .add(R.id.fragment_container, messageFragment)
-                    .add(R.id.fragment_container, profileFragment)
+                    .add(R.id.fragment_container, boardFragment,FRAGMENT_TAG_BOARD)
+                    .add(R.id.fragment_container, searchFragment,FRAGMENT_TAG_SEARCH)
+                    .add(R.id.fragment_container, writeFragment,FRAGMENT_TAG_WRITE)
+                    .add(R.id.fragment_container, messageFragment,FRAGMENT_TAG_MESSAGE)
+                    .add(R.id.fragment_container, profileFragment,FRAGMENT_TAG_PROFILE)
                     .hide(searchFragment).hide(writeFragment).hide(messageFragment).hide(profileFragment)
                     .commit();
         }
@@ -150,5 +159,12 @@ public class MainActivity extends AppCompatActivity implements  BottomFragment.O
     };
 
 
+    @Override
+    public void onBackPressed() {
+        if(boardFragment.isVisible())
+            super.onBackPressed();
+        else
+            myCnClickListenr.onClick(buttonBoard);
+    }
 
 }
