@@ -29,7 +29,7 @@ import com.velo.cityon.adapter.TestAdapter;
  * Use the {@link BoardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BoardFragment extends Fragment{
+public class BoardFragment extends Fragment implements AppbarFragment.OnFragmentInteractionListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -39,11 +39,14 @@ public class BoardFragment extends Fragment{
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private FragmentManager fragmentManager;
 
+    private AppbarFragment mScrolledTitleBar;
     private ViewPager mViewPager;
     private OnFragmentInteractionListener mListener;
 
     private LinearLayout mTitleList;
     private LinearLayout mTitleIndexer;
+
+    private int mCurrentPageIndex;
 
     // TODO: Rename and change types and number of parameters
     public static BoardFragment newInstance() {
@@ -61,11 +64,32 @@ public class BoardFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_board, container, false);
 
+        mScrolledTitleBar = (AppbarFragment) getChildFragmentManager().findFragmentById(R.id.fragment_appbar);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(mScrolledTitleBar != null && position != mCurrentPageIndex)
+                {
+                    mCurrentPageIndex = position;
+                    mScrolledTitleBar.smoothScrollTitleTo(mCurrentPageIndex);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
         //--------------
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -73,7 +97,6 @@ public class BoardFragment extends Fragment{
 
         mTitleList = (LinearLayout) view.findViewById(R.id.toolbar_title_layout);
         mTitleIndexer = (LinearLayout) view.findViewById(R.id.toolbar_title_page_indexer);
-
 
         if (mViewPager != null) {
             for (int i = 0; i < mViewPager.getAdapter().getCount(); i++) {
@@ -95,6 +118,9 @@ public class BoardFragment extends Fragment{
                 mTitleIndexer.addView(indexer);
             }
         }
+
+        mCurrentPageIndex = 0;
+
         return view;
     }
     // TODO: Rename method, update argument and hook method into UI event
@@ -121,6 +147,22 @@ public class BoardFragment extends Fragment{
         mListener = null;
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //from appbar fragment
+    }
+
+    @Override
+    public void onSetChangePageIndex(int index) {
+        //from appbar fragment
+        Log.d(LOG_TAG,"select index : " + String.valueOf(index));
+        if(index != mCurrentPageIndex)
+        {
+            mCurrentPageIndex = index;
+            mViewPager.setCurrentItem(mCurrentPageIndex,true);
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -135,7 +177,6 @@ public class BoardFragment extends Fragment{
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

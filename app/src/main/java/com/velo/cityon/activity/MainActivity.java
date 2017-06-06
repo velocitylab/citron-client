@@ -102,6 +102,13 @@ public class MainActivity extends AppCompatActivity implements  BottomFragment.O
 
     }
 
+    @Override
+    public void onSetChangePageIndex(int index) {
+        if(boardFragment != null)
+            boardFragment.onSetChangePageIndex(index);
+
+    }
+
     private View.OnClickListener myCnClickListenr = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

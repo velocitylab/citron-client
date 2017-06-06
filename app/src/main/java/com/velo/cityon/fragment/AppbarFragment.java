@@ -34,6 +34,8 @@ public class AppbarFragment extends Fragment {
     private String TAG = AppbarFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
+    private LinearLayout title;
+    private TitleScrollView scrollView;
 
     public AppbarFragment() {
         // Required empty public constructor
@@ -68,7 +70,7 @@ public class AppbarFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_appbar, container, false);
 
-        final TitleScrollView scrollView = (TitleScrollView) view.findViewById(R.id.toolbar_title_scrollbar);
+        scrollView = (TitleScrollView) view.findViewById(R.id.toolbar_title_scrollbar);
         scrollView.setSmoothScrollingEnabled(true);
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -83,6 +85,7 @@ public class AppbarFragment extends Fragment {
         });
 
 
+        title = (LinearLayout)scrollView.findViewById(R.id.toolbar_title_layout);
 
         scrollView.setOnScrollStopListner(new TitleScrollView.onScrollStopListner() {
             @Override
@@ -90,63 +93,34 @@ public class AppbarFragment extends Fragment {
                 // TODO Auto-generated method stub
                 Log.d(TAG," "+scrollView.getScrollX());
 
-            }
+                int x = scrollView.getScrollX() + 100;
+                int y = scrollView.getScrollY();
 
-        });
-/*
-        final LinearLayout title = (LinearLayout)scrollView.findViewById(R.id.toolbar_title_layout);
-        title.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.d(TAG,"OnTouch : " + String.valueOf(motionEvent.getAction()));
-                switch(motionEvent.getAction())
+                Log.d(TAG,"OnTouch : x : " + String.valueOf(x) + " Y :  " + String.valueOf(y));
+
+                int width = title.getWidth();
+                int itemWidth = width / title.getChildCount();
+                int startX,endX;
+
+                Log.d(TAG,"OnTouch  Width : " + String.valueOf(width) + " itemWidth :  " + String.valueOf(itemWidth));
+
+                for(int i = 0; i < title.getChildCount() ; i++)
                 {
-                    case MotionEvent.ACTION_DOWN:
+                    startX =  i * itemWidth;
+                    endX = (i + 1) * itemWidth;
+
+                    if(startX <= x && x < endX)
                     {
+                        //scrollView.scrollTo(itemWidth * i, y);
+                        scrollView.smoothScrollTo(itemWidth * i, y);
+                        if(mListener != null)
+                            mListener.onSetChangePageIndex(i);
                         break;
                     }
-                    case MotionEvent.ACTION_MOVE:
-                    {
-                        break;
-                    }
-                    case MotionEvent.ACTION_CANCEL:
-                    {
-                        int x = (int)motionEvent.getX();
-                        int y = (int)motionEvent.getY();
-
-
-                        Log.d(TAG,"OnTouch : x : " + String.valueOf(x) + " Y :  " + String.valueOf(y));
-
-                        Rect rect = title.getClipBounds();
-
-                        for(int i = 0; i < title.getChildCount() ; i++)
-                        {
-                            TextView v = (TextView)title.getChildAt(i);
-
-                            Rect r = v.getClipBounds();
-                            if(r != null)
-                            {
-                                if(r.contains(x,y))
-                                {
-                                    scrollView.scrollTo(x - 100, y);
-                                }
-                            }
-                            else
-                            {
-                                Log.d(TAG,"r is null");
-                            }
-
-                        }
-                        break;
-                    }
-                    default:
-                        break;
                 }
-                return true;
             }
-        });
-        */
 
+        });
 
         return view;
     }
@@ -175,6 +149,14 @@ public class AppbarFragment extends Fragment {
         mListener = null;
     }
 
+    public void smoothScrollTitleTo(int index)
+    {
+        int width = title.getWidth();
+        int itemWidth = width / title.getChildCount();
+        Log.d(TAG,"smoothScrollTitleTo index " + String.valueOf(index));
+        scrollView.smoothScrollTo(itemWidth * index, 0);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -188,5 +170,6 @@ public class AppbarFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void onSetChangePageIndex(int index);
     }
 }
