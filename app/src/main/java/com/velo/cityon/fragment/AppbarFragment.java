@@ -71,8 +71,8 @@ public class AppbarFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_appbar, container, false);
 
         scrollView = (TitleScrollView) view.findViewById(R.id.toolbar_title_scrollbar);
-        scrollView.setSmoothScrollingEnabled(true);
 
+        scrollView.setSmoothScrollingEnabled(true);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -86,6 +86,13 @@ public class AppbarFragment extends Fragment {
 
 
         title = (LinearLayout)scrollView.findViewById(R.id.toolbar_title_layout);
+
+        scrollView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "CLICK : "+v.getX());
+            }
+        });
 
         scrollView.setOnScrollStopListner(new TitleScrollView.onScrollStopListner() {
             @Override

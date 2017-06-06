@@ -38,15 +38,18 @@ public class TestAdapter extends ArrayAdapter<Posting> {
         if (p != null) {
             TextView pTitle      = (TextView) v.findViewById(R.id.posting_title);
             TextView pWriter     = (TextView) v.findViewById(R.id.posting_writer);
+            TextView pDate = (TextView) v.findViewById(R.id.posting_date);
             TextView pHitCount   = (TextView) v.findViewById(R.id.posting_hit_count);
             TextView pLikeCount  = (TextView) v.findViewById(R.id.posting_like_count);
             TextView pReplyCount = (TextView) v.findViewById(R.id.posting_reply_count);
 
             pTitle.setText(p.getTitle());
             pWriter.setText(p.getWriter());
+            pDate.setText(p.getDate().toString());
             pHitCount.setText(String.valueOf(p.getHitCount()));
             pLikeCount.setText(String.valueOf(p.getLikeCount()));
             pReplyCount.setText(String.valueOf(p.getReplyCount()));
+
         }
         return v;
     }

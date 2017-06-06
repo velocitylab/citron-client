@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * Created by jiho87.shin on 2017-05-08.
  */
-
 public class DateUtil {
 
     private static final String DEFAUL_PATTERN = "HH:mm";
@@ -16,4 +15,5 @@ public class DateUtil {
         Date date = new Date();
         return defaultDateFormat.format(date);
     }
+
 }

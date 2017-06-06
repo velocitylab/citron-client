@@ -1,11 +1,12 @@
 package com.velo.cityon.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by jhspi on 2017-05-31.
  */
-public class Posting {
+public class Posting implements Serializable{
 
     String id;
 

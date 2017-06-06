@@ -18,10 +18,12 @@ package com.velo.cityon.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.velo.cityon.R;
 import com.velo.cityon.adapter.TestAdapter;
@@ -29,7 +31,9 @@ import com.velo.cityon.dummydata.Cheeses;
 import com.velo.cityon.model.Posting;
 import com.velo.cityon.service.PostingService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,12 +55,23 @@ import java.util.List;
  */
 public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
 
-    private static final String LOG_TAG = SwipeRefreshListFragmentFragment.class.getSimpleName();
+    private String name;
 
-    private static final int LIST_ITEM_COUNT = 3;
+    private SwipeRefreshListFragmentFragment(){
+    }
+
+    public SwipeRefreshListFragmentFragment(String name){
+        this.name = name;
+    }
+
+    private static final String LOG_TAG = SwipeRefreshListFragmentFragment.class.getSimpleName();
+    private List<Posting> items = new LinkedList<Posting>();
+    private TestAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, name +" : onCreate");
+
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
     }
@@ -64,16 +79,19 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(LOG_TAG, name +" : onViewCreated");
 
-        List<Posting> items = new LinkedList<Posting>();
-
-        TestAdapter adapter = new TestAdapter(
+        if (savedInstanceState != null) {
+            items = (List<Posting>) savedInstanceState.getSerializable("items");
+        }else{
+            items = new ArrayList<>();
+        }
+        adapter = new TestAdapter(
                 getActivity(),
                 R.layout.posting_list,
                 items);
 
         setListAdapter(adapter);
-
         setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -84,42 +102,69 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
         // END_INCLUDE (setup_refreshlistener)
     }
 
+    @Override
+    public void onStart() {
+        Log.d(LOG_TAG, name +" : onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(LOG_TAG, name +" : onResume");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(LOG_TAG, name +" : onPause");
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        Log.d(LOG_TAG, name +" : onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("items", (Serializable) items);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, name +" : onViewStateRestored");
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(LOG_TAG, name +" : onActivityCreated");
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
     private void initiateRefresh() {
-        Log.i(LOG_TAG, "initiateRefresh");
+        Log.i(LOG_TAG, name +"initiateRefresh");
         new DummyBackgroundTask().execute();
     }
 
-
     private void onRefreshComplete(List<Posting> result) {
-        Log.i(LOG_TAG, "onRefreshComplete");
+        Log.i(LOG_TAG, name +" : onRefreshComplete");
 
         // Remove all items from the ListAdapter, and then replace them with the new items
         ArrayAdapter<Posting> adapter = (ArrayAdapter<Posting>) getListAdapter();
-        //adapter.clear();
-
-        for (Posting p : result) {
-            adapter.add(p);
-        }
+        adapter.addAll(result);
 
         setRefreshing(false);
     }
 
     private class DummyBackgroundTask extends AsyncTask<Void, Void, List<Posting>> {
 
-        static final int TASK_DURATION = 1 * 1000; // 1 seconds
-
         @Override
         protected List<Posting> doInBackground(Void... params) {
             // Sleep for a small amount of time to simulate a background-task
-            try {
-                Thread.sleep(TASK_DURATION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Return a new random posting_list of cheeses
-            return PostingService.getInstance().list();
+            List<Posting> list = new ArrayList<>();
+            list.addAll(PostingService.getInstance().list());
+            return list;
         }
+
 
         @Override
         protected void onPostExecute(List<Posting> result) {
