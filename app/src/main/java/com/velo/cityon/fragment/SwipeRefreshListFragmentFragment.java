@@ -27,8 +27,10 @@ import com.velo.cityon.R;
 import com.velo.cityon.adapter.TestAdapter;
 import com.velo.cityon.dummydata.Cheeses;
 import com.velo.cityon.model.Posting;
+import com.velo.cityon.service.PostingService;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -63,10 +65,12 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        List<Posting> items = new LinkedList<Posting>();
+
         TestAdapter adapter = new TestAdapter(
                 getActivity(),
                 R.layout.posting_list,
-                Cheeses.randomPersonList(1));
+                items);
 
         setListAdapter(adapter);
 
@@ -114,7 +118,7 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
             }
 
             // Return a new random posting_list of cheeses
-            return Cheeses.randomPersonList(3);
+            return PostingService.getInstance().list();
         }
 
         @Override

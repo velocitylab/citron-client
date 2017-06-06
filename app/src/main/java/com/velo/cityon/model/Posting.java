@@ -86,4 +86,18 @@ public class Posting {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "Posting{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", title='" + title + '\'' +
+                ", likeCount=" + likeCount +
+                ", hitCount=" + hitCount +
+                ", replyCount=" + replyCount +
+                ", writer='" + writer + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

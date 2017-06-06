@@ -12,14 +12,15 @@ import com.velo.cityon.R;
 import com.velo.cityon.model.Posting;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestAdapter extends ArrayAdapter<Posting> {
 
     private static final String LOG_TAG = TestAdapter.class.getSimpleName();
 
-    private ArrayList<Posting> items;
+    private List<Posting> items;
 
-    public TestAdapter(Context context, int textViewResourceId, ArrayList<Posting> items) {
+    public TestAdapter(Context context, int textViewResourceId, List<Posting> items) {
         super(context, textViewResourceId, items);
         this.items = items;
     }

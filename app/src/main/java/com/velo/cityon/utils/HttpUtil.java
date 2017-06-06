@@ -1,11 +1,13 @@
 package com.velo.cityon.utils;
 
-import android.util.Log;
+import com.google.gson.GsonBuilder;
 
-import java.net.URL;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -16,27 +18,34 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpUtil {
 
-    public void test() throws Exception{
-        // Create URL
-        URL githubEndpoint = new URL("http://175.158.15.84");
+    private Retrofit retrofit;
 
-        // Create connection
-        HttpsURLConnection conn =  (HttpsURLConnection) githubEndpoint.openConnection();
+    static private Map<String, HttpUtil> cache = new HashMap<String, HttpUtil>();
 
-        int responseCode = conn.getResponseCode();
-        String responseMessage = conn.getResponseMessage();
-
-        Log.d("TAG", "responseCode    : "+responseCode);
-        Log.d("TAG", "responseMessage : "+responseMessage);
+    public static HttpUtil getInstance(String baseUrl) {
+        HttpUtil httpUtil = cache.get(baseUrl);
+        if (httpUtil == null) {
+            httpUtil  = new HttpUtil(baseUrl);
+            cache.put(baseUrl, httpUtil);
+        }
+        return httpUtil;
     }
 
-    public void test2(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create())
+    private HttpUtil(String baseUrl){
+        this(baseUrl, GsonConverterFactory.create(new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .create()));
+    }
+
+    private HttpUtil(String baseUrl, Converter.Factory factory){
+        retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(factory)
                 .build();
+    }
 
-
+    public <T> T create(final Class<T> service) {
+        return retrofit.create(service);
     }
 
 }
