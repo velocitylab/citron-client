@@ -16,9 +16,10 @@ import com.velo.cityon.model.Posting;
 import java.util.List;
 
 /**
- * Created by jhspi on 2017-06-07.
+ * Created by MACAIR on 2017. 6. 14..
  */
-public class PostingAdapter extends ArrayAdapter<Posting> {
+
+public class BoardDetailListAdapter extends ArrayAdapter<Posting> {
 
     private static final String LOG_TAG = TestAdapter.class.getSimpleName();
 
@@ -27,7 +28,8 @@ public class PostingAdapter extends ArrayAdapter<Posting> {
 
     private List<Posting> items;
 
-    public PostingAdapter(Context context, int textViewResourceId, List<Posting> items) {
+
+    public BoardDetailListAdapter(Context context, int textViewResourceId, List<Posting> items) {
         super(context, textViewResourceId, items);
         this.items = items;
     }
@@ -39,7 +41,7 @@ public class PostingAdapter extends ArrayAdapter<Posting> {
 
         if (type == SPINNER) {
 
-            ViewHolderSpinner viewHolderSpinner;
+            BoardDetailListAdapter.ViewHolderSpinner viewHolderSpinner;
             if (convertView == null) {
                 LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.posting_spinner, null);
@@ -53,16 +55,16 @@ public class PostingAdapter extends ArrayAdapter<Posting> {
                     public void onNothingSelected(AdapterView<?> parent) {}
                 });
 
-                viewHolderSpinner = new ViewHolderSpinner();
+                viewHolderSpinner = new BoardDetailListAdapter.ViewHolderSpinner();
                 viewHolderSpinner.spinner = spinner;
                 convertView.setTag(viewHolderSpinner);
             }
             else {
-                viewHolderSpinner = (ViewHolderSpinner) convertView.getTag();
+                viewHolderSpinner = (BoardDetailListAdapter.ViewHolderSpinner) convertView.getTag();
             }
         }
         else {
-            ViewHolder viewHolder;
+            BoardDetailListAdapter.ViewHolder viewHolder;
             if (convertView == null) {
                 LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.posting_list, null);
@@ -74,7 +76,7 @@ public class PostingAdapter extends ArrayAdapter<Posting> {
                 TextView pLikeCount  = (TextView) convertView.findViewById(R.id.posting_like_count);
                 TextView pReplyCount = (TextView) convertView.findViewById(R.id.posting_reply_count);
 
-                viewHolder = new ViewHolder();
+                viewHolder = new BoardDetailListAdapter.ViewHolder();
                 viewHolder.pTitle = pTitle;
                 viewHolder.pWriter = pWriter;
                 viewHolder.pDate = pDate;
@@ -85,7 +87,7 @@ public class PostingAdapter extends ArrayAdapter<Posting> {
                 convertView.setTag(viewHolder);
             }
             else {
-                viewHolder = (ViewHolder) convertView.getTag();
+                viewHolder = (BoardDetailListAdapter.ViewHolder) convertView.getTag();
             }
             Posting p = items.get(position);
             viewHolder.pTitle.setText(p.getTitle());

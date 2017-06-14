@@ -1,34 +1,14 @@
-/*
- * Copyright 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.velo.cityon.fragment;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.velo.cityon.R;
-import com.velo.cityon.activity.BoardDetailActivity;
-import com.velo.cityon.adapter.PostingAdapter;
+import com.velo.cityon.adapter.BoardDetailListAdapter;
 import com.velo.cityon.model.Posting;
 import com.velo.cityon.service.PostingService;
 
@@ -37,35 +17,23 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * A sample which shows how to use {@link android.support.v4.widget.SwipeRefreshLayout} within a
- * {@link android.support.v4.app.ListFragment} to add the 'swipe-to-refresh' gesture to a
- * {@link android.widget.ListView}. This is provided through the provided re-usable
- * {@link SwipeRefreshListFragment} class.
- *
- * <p>To provide an accessible way to trigger the refresh, this app also provides a refresh
- * action item. This item should be displayed in the Action Bar's overflow item.
- *
- * <p>In this sample app, the refresh updates the ListView with a random set of new items.
- *
- * <p>This sample also provides the functionality to change the colors displayed in the
- * {@link android.support.v4.widget.SwipeRefreshLayout} through the options menu. This is meant to
- * showcase the use of color rather than being something that should be integrated into apps.
+ * Created by MACAIR on 2017. 6. 14..
  */
-public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
 
+public class BoardDetailListFragment extends SwipeRefreshListFragment {
+
+    final static String LOG_TAG = BoardDetailListFragment.class.getSimpleName();
     private String name;
 
-    private SwipeRefreshListFragmentFragment(){
+    private List<Posting> items = new LinkedList<Posting>();
+
+    public BoardDetailListFragment(){
     }
 
-    public SwipeRefreshListFragmentFragment(String name){
+    public BoardDetailListFragment(String name){
         this.name = name;
     }
-
-    private static final String LOG_TAG = SwipeRefreshListFragmentFragment.class.getSimpleName();
-    private List<Posting> items = new LinkedList<Posting>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,22 +48,22 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d(LOG_TAG, name +" : onViewCreated");
 
+
         if (savedInstanceState != null) {
             items = (List<Posting>) savedInstanceState.getSerializable("items");
         }else{
             items = new ArrayList<>();
         }
-//        TestAdapter adapter = new TestAdapter(
-//                getActivity(),
-//                R.layout.posting_list,
-//                items);
 
-        PostingAdapter adapter = new PostingAdapter(
+
+
+        BoardDetailListAdapter adapter = new BoardDetailListAdapter(
                 getActivity(),
                 R.layout.posting_list,
                 items);
 
         setListAdapter(adapter);
+        /*
         setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -103,8 +71,11 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
                 initiateRefresh();
             }
         });
+        */
 
         // END_INCLUDE (setup_refreshlistener)
+
+        new BoardDetailListFragment.DummyBackgroundTask().execute();
     }
 
     @Override
@@ -129,6 +100,7 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
     public void onSaveInstanceState(final Bundle outState) {
         Log.d(LOG_TAG, name +" : onSaveInstanceState");
         super.onSaveInstanceState(outState);
+
         outState.putSerializable("items", (Serializable) items);
     }
 
@@ -145,11 +117,6 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
 
     }
 
-    private void initiateRefresh() {
-        Log.i(LOG_TAG, name +"initiateRefresh");
-        new DummyBackgroundTask().execute();
-    }
-
     private void onRefreshComplete(List<Posting> result) {
         Log.i(LOG_TAG, name +" : onRefreshComplete");
 
@@ -159,18 +126,6 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
         setRefreshing(false);
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-
-        Log.d(LOG_TAG," onListItemClick Position : " + position );
-        Intent intent = new Intent(getActivity().getApplicationContext(),BoardDetailActivity.class);
-        intent.putExtra("position",position);
-        startActivity(intent);
-        //getActivity().overridePendingTransition(R.anim.anim_slide_from_right, R.anim.anim_slide_to_right);
-
-
-        super.onListItemClick(l, v, position, id);
-    }
 
     private class DummyBackgroundTask extends AsyncTask<Void, Void, List<Posting>> {
 
@@ -192,5 +147,4 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
         }
 
     }
-
 }
