@@ -43,8 +43,6 @@ public class PostingService {
 
     public List<Posting> list() {
 
-        Log.d("jiho", "list");
-
         List<Posting> result = new LinkedList<>();
         try {
             Response<PostingVO> resp= postingInterface.list().execute();
