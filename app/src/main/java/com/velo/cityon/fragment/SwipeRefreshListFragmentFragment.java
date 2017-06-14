@@ -170,7 +170,6 @@ public class SwipeRefreshListFragmentFragment extends SwipeRefreshListFragment {
             return list;
         }
 
-
         @Override
         protected void onPostExecute(List<Posting> result) {
             super.onPostExecute(result);

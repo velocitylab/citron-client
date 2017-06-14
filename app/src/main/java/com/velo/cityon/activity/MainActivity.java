@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.velo.cityon.fragment.AppbarFragment;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements  BottomFragment.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         if (findViewById(R.id.fragment_container) != null) {
             // However, if we're being restored from a previous state,

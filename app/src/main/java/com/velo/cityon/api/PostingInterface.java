@@ -13,4 +13,5 @@ public interface PostingInterface {
 
     @GET("v1/post/_list")
     Call<PostingVO> list();
+
 }
